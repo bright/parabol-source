@@ -71,6 +71,9 @@ const signUpWithPassword: MutationResolvers['signUpWithPassword'] = async (
   }
 
   const verifiedByInvite = await isValidEmailInvitationToken(email, invitationToken)
+  if (process.env.AUTH_SIGNUP_DISABLED === 'true' && !verifiedByInvite) {
+    return {error: {message: 'Registration is invite-only'}}
+  }
   if (!verifiedByInvite) {
     const existingVerification = await pg
       .selectFrom('EmailVerification')
