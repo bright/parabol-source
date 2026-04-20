@@ -78,6 +78,7 @@ const GenericAuthentication = (props: Props) => {
   const isMicrosoftAuthEnabled = window.__ACTION__.AUTH_MICROSOFT_ENABLED
   const isInternalAuthEnabled = window.__ACTION__.AUTH_INTERNAL_ENABLED
   const isSSOAuthEnabled = window.__ACTION__.AUTH_SSO_ENABLED
+  const isSignupDisabled = window.__ACTION__.AUTH_SIGNUP_DISABLED
   const isCreate = page === 'create-account'
   const action = isCreate ? CREATE_ACCOUNT_LABEL : SIGNIN_LABEL
   const pageTitle = `${action} | Parabol`
@@ -108,12 +109,14 @@ const GenericAuthentication = (props: Props) => {
   return (
     <AuthenticationDialog ref={authDialogRef}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogSubTitle>
-        <span>{actionCopy}</span>
-        <BrandedLink onClick={() => goToPage(counterActionSlug, location.search)}>
-          {counterAction}
-        </BrandedLink>
-      </DialogSubTitle>
+      {(!isSignupDisabled || isCreate) && (
+        <DialogSubTitle>
+          <span>{actionCopy}</span>
+          <BrandedLink onClick={() => goToPage(counterActionSlug, location.search)}>
+            {counterAction}
+          </BrandedLink>
+        </DialogSubTitle>
+      )}
       {isGoogleAuthEnabled && (
         <GoogleOAuthButtonBlock
           isCreate={isCreate}
